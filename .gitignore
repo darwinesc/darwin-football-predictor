@@ -4,6 +4,7 @@ __pycache__/
 build/
 dist/
 wheels/
+src\football_predictor\data\raw\E0.csv
 *.egg-info
 
 # Virtual environments

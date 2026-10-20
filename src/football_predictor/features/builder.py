@@ -13,8 +13,7 @@ def build_features(df, min_games=1):
         team_stats: Final cumulative statistics per team
     """
     required = {
-        "HomeTeam", "AwayTeam",
-        "FTHG", "FTAG", "FTR", "Date"
+        "HomeTeam", "AwayTeam","FTHG", "FTAG", "FTR", "Date"
     }
     missing = required - set(df.columns)
     if missing:
