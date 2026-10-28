@@ -3,6 +3,8 @@ import pandas as pd
 from football_predictor.data.loader import load_data
 from football_predictor.features.builder import build_features
 from football_predictor.model.trainer import train_model
+from football_predictor.model.goal_prob import get_goal_prob
+from football_predictor.components.goal_chart import show_all_goal_lines
 
 
 st.title("⚽ Football Match Predictor")
@@ -40,3 +42,12 @@ if st.button("Predict"):
     })
 
     st.bar_chart(prob_df.set_index("Outcome"))
+
+    # Calculate goal prob
+    probabilidades = get_goal_prob(input_data["home_attack"], input_data["away_attack"])
+
+    #Show Donut Chart goals
+    show_all_goal_lines(probabilidades)
+
+
+    
