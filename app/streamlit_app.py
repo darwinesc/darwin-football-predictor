@@ -5,6 +5,7 @@ from football_predictor.features.builder import build_features
 from football_predictor.model.trainer import train_model
 from football_predictor.model.goal_prob import get_goal_prob
 from football_predictor.components.goal_chart import show_all_goal_lines
+from football_predictor.components.h2h import show_h2h
 
 
 st.title("⚽ Football Match Predictor")
@@ -48,6 +49,9 @@ if st.button("Predict"):
 
     #Show Donut Chart goals
     show_all_goal_lines(probabilidades)
+
+    with st.expander("⚔️ Historial H2H", expanded=True):
+        show_h2h(df, home_team, away_team)
 
 
     
