@@ -1,16 +1,19 @@
 import streamlit as st
 import pandas as pd
-from football_predictor.data.loader import load_data
+from football_predictor.data.loader import load_data, load_csv
 from football_predictor.features.builder import build_features
 from football_predictor.model.trainer import train_model
 from football_predictor.model.goal_prob import get_goal_prob
 from football_predictor.components.goal_chart import show_all_goal_lines
 from football_predictor.components.h2h import show_h2h
-
+from football_predictor.components.match_resume import show_match_resume
+from football_predictor.components.logos import merge_team_logos
 
 st.title("⚽ Football Match Predictor")
 
-df = load_data()
+df = load_data("E0.csv")
+df_logo = load_csv("clubs_badges.csv")
+merge_df = merge_team_logos(df, df_logo)
 model_df, team_stats = build_features(df)
 model, accuracy = train_model(model_df)
 
@@ -29,11 +32,23 @@ if st.button("Predict"):
         "away_attack": team_stats[away_team]["attack"],
         "away_defense": team_stats[away_team]["defense"],
     }])
-
+    match_df_log = merge_df[(merge_df["HomeTeam"] == home_team) & (merge_df["AwayTeam"] == away_team)]
+    #st.dataframe(match_df_log[["HomeTeam", "AwayTeam", "HomeLogo", "AwayLogo"]])
     prediction = model.predict(input_data)[0]
     probabilities = model.predict_proba(input_data)[0]
 
     st.subheader("Prediction")
+
+    show_match_resume(
+        home_team=match_df_log['HomeTeam'].iloc[0],
+        away_team=match_df_log['AwayTeam'].iloc[0],
+        home_crest=match_df_log['HomeLogo'].iloc[0],
+        away_crest=match_df_log['AwayLogo'].iloc[0],
+        prob_home=48.5,
+        prob_draw=27.0,
+        prob_away=24.5
+    )
+
     st.write(f"Result: **{prediction}**")
     st.write("H = Home | D = Draw | A = Away")
 

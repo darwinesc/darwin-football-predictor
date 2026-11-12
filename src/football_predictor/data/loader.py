@@ -4,12 +4,12 @@ from typing import Optional, Union
 import pandas as pd
 
 DATA_PATH = (
-    Path(__file__).resolve().parent / "raw" / "E0.csv"
+    Path(__file__).resolve().parent / "raw"
 )
 
-def load_data(path: Optional[Union[str, Path]] = None) -> pd.DataFrame:
+def load_csv(path: Optional[Union[str, Path]] = None) -> pd.DataFrame:
     """Load real historical football results from a local CSV."""
-    csv_path = Path(path) if path else DATA_PATH
+    csv_path = DATA_PATH / path if path else DATA_PATH / "E0.csv"
 
     if not csv_path.exists():
         raise FileNotFoundError(
@@ -21,6 +21,13 @@ def load_data(path: Optional[Union[str, Path]] = None) -> pd.DataFrame:
         df = pd.read_csv(csv_path, encoding="utf-8-sig")
     except UnicodeDecodeError:
         df = pd.read_csv(csv_path, encoding="cp1252")
+
+    return df
+
+
+def load_data(path: Optional[Union[str, Path]] = None) -> pd.DataFrame:
+
+    df = load_csv(path)
 
     required = {
         "HomeTeam",
