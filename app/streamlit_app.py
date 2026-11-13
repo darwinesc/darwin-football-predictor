@@ -37,17 +37,25 @@ if st.button("Predict"):
     prediction = model.predict(input_data)[0]
     probabilities = model.predict_proba(input_data)[0]
 
+    prob_away, prob_draw, prob_home = probabilities * 100
+
+    print(type(probabilities))
+
     st.subheader("Prediction")
 
-    show_match_resume(
-        home_team=match_df_log['HomeTeam'].iloc[0],
-        away_team=match_df_log['AwayTeam'].iloc[0],
-        home_crest=match_df_log['HomeLogo'].iloc[0],
-        away_crest=match_df_log['AwayLogo'].iloc[0],
-        prob_home=48.5,
-        prob_draw=27.0,
-        prob_away=24.5
-    )
+    if not match_df_log.empty:
+
+        show_match_resume(
+            home_team=match_df_log['HomeTeam'].iloc[0],
+            away_team=match_df_log['AwayTeam'].iloc[0],
+            home_crest=match_df_log['HomeLogo'].iloc[0],
+            away_crest=match_df_log['AwayLogo'].iloc[0],
+            prob_home=prob_home,
+            prob_draw=prob_draw,
+            prob_away=prob_away
+        )
+    else:
+        st.warning("No se encontró el partido seleccionado")
 
     st.write(f"Result: **{prediction}**")
     st.write("H = Home | D = Draw | A = Away")
